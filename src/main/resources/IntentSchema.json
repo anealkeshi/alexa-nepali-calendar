@@ -1,0 +1,31 @@
+{
+	"intents": [
+		{
+			"intent": "ConvertEnglishToNepaliDateIntent",
+			"slots": [
+				{
+					"name": "dateTobeConverted",
+					"type": "AMAZON.DATE"
+				}
+			]
+		},
+		{
+			"intent": "ConvertNepaliToEnglishDateIntent",
+			"slots": [
+				{
+					"name": "dateTobeConverted",
+					"type": "AMAZON.DATE"
+				}
+			]
+		},
+		{
+			"intent": "AskNepaliDateIntent",
+			"slots": [
+				{
+					"name": "dateTobeConverted",
+					"type": "AMAZON.DATE"
+				}
+			]
+		}
+	]
+}

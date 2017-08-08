@@ -1,0 +1,10 @@
+ConvertNepaliToEnglishDateIntent convert {dateTobeConverted} to English date
+ConvertNepaliToEnglishDateIntent convert {dateTobeConverted} to AD
+ConvertNepaliToEnglishDateIntent convert {dateTobeConverted} to Anno Domini
+ConvertEnglishToNepaliDateIntent convert {dateTobeConverted} to Nepali date
+ConvertEnglishToNepaliDateIntent convert {dateTobeConverted} to BS
+ConvertEnglishToNepaliDateIntent convert {dateTobeConverted} to Bikram Sambat
+ConvertEnglishToNepaliDateIntent convert {dateTobeConverted} to Nepal date
+AskNepaliDateIntent what day is {dateTobeConverted}
+AskNepaliDateIntent what date is {dateTobeConverted}
+AskNepaliDateIntent dateTobeConverted}
