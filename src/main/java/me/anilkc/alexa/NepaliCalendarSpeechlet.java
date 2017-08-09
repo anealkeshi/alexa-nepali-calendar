@@ -3,8 +3,10 @@ package me.anilkc.alexa;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,6 +24,9 @@ import com.amazon.speech.speechlet.SpeechletV2;
 public class NepaliCalendarSpeechlet implements SpeechletV2 {
 
 
+  private static final String ASK_NEPALI_DATE_INTENT = "AskNepaliDateIntent";
+  private static final String CONVERT_NEPALI_TO_ENGLISH_DATE_INTENT = "ConvertNepaliToEnglishDateIntent";
+  private static final String CONVERT_ENGLISH_TO_NEPALI_DATE_INTENT = "ConvertEnglishToNepaliDateIntent";
   private static final Logger LOG = LoggerFactory.getLogger(NepaliCalendarSpeechlet.class);
 
 
@@ -42,10 +47,6 @@ public class NepaliCalendarSpeechlet implements SpeechletV2 {
     LOG.info("onIntent requestId={}, sessionId={}, intent={}, slots={}", intentRequest.getRequestId(), session.getSessionId(),
         intentRequest.getIntent().getName(), intentRequest.getIntent().getSlots());
 
-
-    // TODO validate date range
-
-
     Intent intent = intentRequest.getIntent();
     Slot dateTobeConvertedSlot = intent.getSlot("dateTobeConverted");
     StringBuilder speechText = new StringBuilder();
@@ -56,6 +57,9 @@ public class NepaliCalendarSpeechlet implements SpeechletV2 {
     try {
       LOG.info("dateTobeConverted = {}", dateTobeConvertedSlot.getValue());
       dateTobeConverted = dateFormat.parse(dateTobeConvertedSlot.getValue());
+      if (validateDate(dateTobeConverted, speechText, intent.getName()).length() > 0) {
+        return AlexaUtil.getSpeechletResponse("Can't handle dates", speechText.toString(), true);
+      }
     } catch (ParseException e) {
       speechText.append("I don't understand. ");
       speechletResponse = AlexaUtil.getSpeechletResponse("Sorry!!!", speechText.toString(), true);
@@ -63,7 +67,7 @@ public class NepaliCalendarSpeechlet implements SpeechletV2 {
     }
 
 
-    if ("ConvertEnglishToNepaliDateIntent".equals(intent.getName())) {
+    if (CONVERT_ENGLISH_TO_NEPALI_DATE_INTENT.equals(intent.getName())) {
 
       speechText.append(AlexaDateUtil.getFormattedDateInEnglish(dateTobeConverted));
       speechText.append(" is ");
@@ -71,7 +75,7 @@ public class NepaliCalendarSpeechlet implements SpeechletV2 {
       speechText.append(" in Bikram Sumbut.");
       speechletResponse = AlexaUtil.getSpeechletResponse("English to Nepali Date", speechText.toString(), true);
 
-    } else if ("ConvertNepaliToEnglishDateIntent".equals(intent.getName())) {
+    } else if (CONVERT_NEPALI_TO_ENGLISH_DATE_INTENT.equals(intent.getName())) {
 
       speechText.append(AlexaDateUtil.getFormattedDateInNepali(dateTobeConverted));
       speechText.append(" is ");
@@ -79,7 +83,7 @@ public class NepaliCalendarSpeechlet implements SpeechletV2 {
       speechText.append(" in Anno Domini.");
       speechletResponse = AlexaUtil.getSpeechletResponse("Nepali to English Date", speechText.toString(), true);
 
-    } else if ("AskNepaliDateIntent".equals(intent.getName())) {
+    } else if (ASK_NEPALI_DATE_INTENT.equals(intent.getName())) {
 
       speechText.append("It is ");
       speechText.append(AlexaDateUtil.getFormattedDateInNepali(NepaliDateConverter.convertEnglishToNepalDate(dateTobeConverted)));
@@ -91,6 +95,40 @@ public class NepaliCalendarSpeechlet implements SpeechletV2 {
     }
 
     return speechletResponse;
+  }
+
+  private StringBuilder validateDate(Date dateTobeConverted, StringBuilder speechText, String intent) {
+
+    LocalDate date = AlexaDateUtil.getLocalDateFromDate(dateTobeConverted);
+    LocalDate baseDate;
+    LocalDate maxDate;
+
+    if (StringUtils.equals(CONVERT_ENGLISH_TO_NEPALI_DATE_INTENT, intent) || StringUtils.equals(ASK_NEPALI_DATE_INTENT, intent)) {
+
+      baseDate = NepaliDateConverter.getBaseEnglishDate();
+      maxDate = NepaliDateConverter.getMaxEnglishDate();
+      if (date.isBefore(baseDate) || date.isAfter(maxDate)) {
+        baseDate = NepaliDateConverter.getBaseEnglishDate();
+        maxDate = NepaliDateConverter.getMaxEnglishDate();
+        speechText.append("Sorry. I can only handle dates between ");
+        speechText.append(AlexaDateUtil.getFormattedDateInEnglish(AlexaDateUtil.getDateFromLocalDate(baseDate)));
+        speechText.append(" and ");
+        speechText.append(AlexaDateUtil.getFormattedDateInEnglish(AlexaDateUtil.getDateFromLocalDate(maxDate)));
+      }
+
+    } else if (StringUtils.equals(CONVERT_NEPALI_TO_ENGLISH_DATE_INTENT, intent)) {
+
+      baseDate = NepaliDateConverter.getBaseNepaliDate();
+      maxDate = NepaliDateConverter.getMaxNepaliDate();
+      if (date.isBefore(baseDate) || date.isAfter(maxDate)) {
+        speechText.append("Sorry. I can only handle dates between ");
+        speechText.append(AlexaDateUtil.getFormattedDateInNepali(AlexaDateUtil.getDateFromLocalDate(baseDate)));
+        speechText.append(" and ");
+        speechText.append(AlexaDateUtil.getFormattedDateInNepali(AlexaDateUtil.getDateFromLocalDate(maxDate)));
+      }
+
+    }
+    return speechText;
   }
 
   @Override

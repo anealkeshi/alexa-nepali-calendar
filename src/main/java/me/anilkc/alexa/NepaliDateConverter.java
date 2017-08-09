@@ -108,14 +108,20 @@ public class NepaliDateConverter {
     nepaliDateMap.put(2090, new int[] {0, 30, 32, 31, 32, 31, 30, 30, 30, 29, 30, 30, 30});
   }
 
-  public static LocalDate getLeastNepaliDate() {
-    LocalDate leastNepaliDate = LocalDate.of(2000, 1, 1);
-    return leastNepaliDate;
+  public static LocalDate getBaseNepaliDate() {
+    return LocalDate.of(2000, 1, 1);
   }
 
   public static LocalDate getBaseEnglishDate() {
-    LocalDate leastEnglishDate = LocalDate.of(1943, 4, 14);
-    return leastEnglishDate;
+    return LocalDate.of(1943, 4, 14);
+  }
+
+  public static LocalDate getMaxNepaliDate() {
+    return LocalDate.of(2090, 12, 30);
+  }
+
+  public static LocalDate getMaxEnglishDate() {
+    return LocalDate.of(2034, 4, 13);
   }
 
   /**
