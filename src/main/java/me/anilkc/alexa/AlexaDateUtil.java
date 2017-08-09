@@ -49,11 +49,11 @@ public final class AlexaDateUtil {
 
   private static final String[] DAYS_OF_WEEK_ENGLISH = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 
-  private static final String[] MONTHS_NEPALI = {"Baaisakh", "Jestha", "Asaar", "Sraawan", "Bghhaa draw", "Aasoj", "Kar thik", "Mung seer",
-      "Poush", "Maangh", "Faalgoon", "Chai traw"};
+  private static final String[] MONTHS_NEPALI =
+      {"Baaisakh", "Jestha", "Asaar", "Sraawan", "BghhaaDraw", "Aasoj", "KarThik", "MungSeer", "Poush", "Maangh", "Faalgoon", "ChaieTraw"};
 
   private static final String[] DAYS_OF_WEEK_NEPALI =
-      {"Aai tta baar", "Soam baar", "Mangal bar", "Buddha bar", "Bihi bar", "Sukra bar", "Sani bar"};
+      {"AaiTtaBaar", "SoamBaar", "MungulBaar", "BuddhaBaar", "BihiBaar", "SukraBaar", "SaniBaar"};
 
   /**
    * Returns a speech formatted date, without the time. If the year is the same as current year, it

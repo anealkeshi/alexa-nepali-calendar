@@ -64,22 +64,28 @@ public class NepaliCalendarSpeechlet implements SpeechletV2 {
 
 
     if ("ConvertEnglishToNepaliDateIntent".equals(intent.getName())) {
+
       speechText.append(AlexaDateUtil.getFormattedDateInEnglish(dateTobeConverted));
       speechText.append(" is ");
       speechText.append(AlexaDateUtil.getFormattedDateInNepali(NepaliDateConverter.convertEnglishToNepalDate(dateTobeConverted)));
       speechText.append(" in Bikram Sumbut.");
       speechletResponse = AlexaUtil.getSpeechletResponse("English to Nepali Date", speechText.toString(), true);
+
     } else if ("ConvertNepaliToEnglishDateIntent".equals(intent.getName())) {
+
       speechText.append(AlexaDateUtil.getFormattedDateInNepali(dateTobeConverted));
       speechText.append(" is ");
       speechText.append(AlexaDateUtil.getFormattedDateInEnglish(NepaliDateConverter.convertNepaliToEnglishDate(dateTobeConverted)));
       speechText.append(" in Anno Domini.");
       speechletResponse = AlexaUtil.getSpeechletResponse("Nepali to English Date", speechText.toString(), true);
+
     } else if ("AskNepaliDateIntent".equals(intent.getName())) {
-      speechText.append("It is, ");
+
+      speechText.append("It is ");
       speechText.append(AlexaDateUtil.getFormattedDateInNepali(NepaliDateConverter.convertEnglishToNepalDate(dateTobeConverted)));
       speechText.append(" in Bikram Sumbut.");
       speechletResponse = AlexaUtil.getSpeechletResponse("Nepali Date", speechText.toString(), true);
+
     } else {
       speechText.append("Something unexpected happened. Try back later.");
     }
