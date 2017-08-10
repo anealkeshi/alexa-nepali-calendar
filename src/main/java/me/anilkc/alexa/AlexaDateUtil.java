@@ -66,13 +66,8 @@ public final class AlexaDateUtil {
     todayCal.setTime(today);
     Calendar dateCal = Calendar.getInstance();
     dateCal.setTime(date);
-    if (todayCal.get(Calendar.YEAR) == dateCal.get(Calendar.YEAR)) {
-      return DAYS_OF_WEEK_ENGLISH[dateCal.get(Calendar.DAY_OF_WEEK) - 1] + ' ' + MONTHS_ENGLISH[dateCal.get(Calendar.MONTH)] + ' '
-          + DAYS_OF_MONTH[dateCal.get(Calendar.DATE) - 1];
-    } else {
-      return DAYS_OF_WEEK_ENGLISH[dateCal.get(Calendar.DAY_OF_WEEK) - 1] + ' ' + (dateCal.get(Calendar.MONTH) + 1) + '/'
-          + dateCal.get(Calendar.DATE) + '/' + dateCal.get(Calendar.YEAR);
-    }
+    return DAYS_OF_WEEK_ENGLISH[dateCal.get(Calendar.DAY_OF_WEEK) - 1] + ' ' + MONTHS_ENGLISH[dateCal.get(Calendar.MONTH)] + ' '
+        + DAYS_OF_MONTH[dateCal.get(Calendar.DATE) - 1] + ' ' + dateCal.get(Calendar.YEAR);
   }
 
 
@@ -84,14 +79,9 @@ public final class AlexaDateUtil {
    * @param date
    * @return
    */
-  public static String getFormattedDateInNepali(Date date) {
-    Date today = new Date();
-    Calendar todayCal = Calendar.getInstance();
-    todayCal.setTime(today);
-    Calendar dateCal = Calendar.getInstance();
-    dateCal.setTime(date);
-    return DAYS_OF_WEEK_NEPALI[dateCal.get(Calendar.DAY_OF_WEEK) - 1] + ", " + MONTHS_NEPALI[dateCal.get(Calendar.MONTH)] + " "
-        + DAYS_OF_MONTH[dateCal.get(Calendar.DATE) - 1] + ", " + dateCal.get(Calendar.YEAR);
+  public static String getFormattedDateInNepali(NepaliDate date) {
+    return DAYS_OF_WEEK_NEPALI[date.getDayOfWeek() - 1] + ", " + MONTHS_NEPALI[date.getMonth()] + " "
+        + DAYS_OF_MONTH[date.getDayOfMonth() - 1] + ", " + date.getYear();
   }
 
   /**
@@ -149,5 +139,15 @@ public final class AlexaDateUtil {
   public static LocalDate getLocalDateFromDate(Date date) {
     Instant instant = Instant.ofEpochMilli(date.getTime());
     return LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).toLocalDate();
+  }
+
+  public static NepaliDate getNepaliDateFromDate(Date date) {
+    Calendar dateCal = Calendar.getInstance();
+    dateCal.setTime(date);
+    return new NepaliDate(dateCal.get(Calendar.YEAR), dateCal.get(Calendar.MONTH) - 1, dateCal.get(Calendar.DAY_OF_MONTH));
+  }
+
+  public static NepaliDate getNepaliDateFromLocalDate(LocalDate date) {
+    return getNepaliDateFromDate(getDateFromLocalDate(date));
   }
 }

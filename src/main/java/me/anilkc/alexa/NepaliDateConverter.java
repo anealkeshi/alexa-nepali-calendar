@@ -135,7 +135,7 @@ public class NepaliDateConverter {
    * @param date
    * @return
    */
-  public static Date convertEnglishToNepalDate(Date date) {
+  public static NepaliDate convertEnglishToNepaliDate(Date date) {
     LocalDate englishDate = AlexaDateUtil.getLocalDateFromDate(date);
     int differenceInDays = (int) ChronoUnit.DAYS.between(getBaseEnglishDate(), englishDate);
     // including today's date
@@ -154,7 +154,8 @@ public class NepaliDateConverter {
           differenceInDays = differenceInDays - daysInMonthInYear[month];
         } else {
           // Found the year and month and day
-          return AlexaDateUtil.getDateFromLocalDate(LocalDate.of(year, month, differenceInDays));
+          // Can't use normal date because it can't handle leap month
+          return new NepaliDate(year, month - 1, differenceInDays);
         }
       }
     }

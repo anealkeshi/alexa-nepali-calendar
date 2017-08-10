@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
@@ -71,22 +72,27 @@ public class NepaliCalendarSpeechlet implements SpeechletV2 {
 
       speechText.append(AlexaDateUtil.getFormattedDateInEnglish(dateTobeConverted));
       speechText.append(" is ");
-      speechText.append(AlexaDateUtil.getFormattedDateInNepali(NepaliDateConverter.convertEnglishToNepalDate(dateTobeConverted)));
+      speechText.append(AlexaDateUtil.getFormattedDateInNepali(NepaliDateConverter.convertEnglishToNepaliDate(dateTobeConverted)));
       speechText.append(" in Bikram Sumbut.");
       speechletResponse = AlexaUtil.getSpeechletResponse("English to Nepali Date", speechText.toString(), true);
 
     } else if (CONVERT_NEPALI_TO_ENGLISH_DATE_INTENT.equals(intent.getName())) {
 
-      speechText.append(AlexaDateUtil.getFormattedDateInNepali(dateTobeConverted));
+      // Get Nepali Date
+      NepaliDate nepaliDate = NepaliDateConverter.convertEnglishToNepaliDate(dateTobeConverted);
+      speechText.append(AlexaDateUtil.getFormattedDateInNepali(nepaliDate));
       speechText.append(" is ");
-      speechText.append(AlexaDateUtil.getFormattedDateInEnglish(NepaliDateConverter.convertNepaliToEnglishDate(dateTobeConverted)));
+      // Convert same nepali date to English date
+      Calendar cal = Calendar.getInstance();
+      cal.set(nepaliDate.getYear(), nepaliDate.getMonth(), nepaliDate.getDayOfMonth());
+      speechText.append(AlexaDateUtil.getFormattedDateInEnglish(NepaliDateConverter.convertNepaliToEnglishDate(cal.getTime())));
       speechText.append(" in Anno Domini.");
       speechletResponse = AlexaUtil.getSpeechletResponse("Nepali to English Date", speechText.toString(), true);
 
     } else if (ASK_NEPALI_DATE_INTENT.equals(intent.getName())) {
 
       speechText.append("It is ");
-      speechText.append(AlexaDateUtil.getFormattedDateInNepali(NepaliDateConverter.convertEnglishToNepalDate(dateTobeConverted)));
+      speechText.append(AlexaDateUtil.getFormattedDateInNepali(NepaliDateConverter.convertEnglishToNepaliDate(dateTobeConverted)));
       speechText.append(" in Bikram Sumbut.");
       speechletResponse = AlexaUtil.getSpeechletResponse("Nepali Date", speechText.toString(), true);
 
@@ -122,9 +128,9 @@ public class NepaliCalendarSpeechlet implements SpeechletV2 {
       maxDate = NepaliDateConverter.getMaxNepaliDate();
       if (date.isBefore(baseDate) || date.isAfter(maxDate)) {
         speechText.append("Sorry. I can only handle dates between ");
-        speechText.append(AlexaDateUtil.getFormattedDateInNepali(AlexaDateUtil.getDateFromLocalDate(baseDate)));
+        speechText.append(AlexaDateUtil.getFormattedDateInNepali(AlexaDateUtil.getNepaliDateFromLocalDate(baseDate)));
         speechText.append(" and ");
-        speechText.append(AlexaDateUtil.getFormattedDateInNepali(AlexaDateUtil.getDateFromLocalDate(maxDate)));
+        speechText.append(AlexaDateUtil.getFormattedDateInNepali(AlexaDateUtil.getNepaliDateFromLocalDate(maxDate)));
       }
 
     }
