@@ -26,6 +26,18 @@
 					"type": "AMAZON.DATE"
 				}
 			]
+		},
+		{
+			"intent": "AMAZON.CancelIntent",
+			"slots": []
+		},
+		{
+			"intent": "AMAZON.StopIntent",
+			"slots": []
+		},
+		{
+			"intent": "AMAZON.HelpIntent",
+			"slots": []
 		}
 	]
 }
